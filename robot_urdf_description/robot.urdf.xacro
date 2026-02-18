@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
-<!-- http://wiki.ros.org/urdf/XML/link -->
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="my_robot">
-<xacro:include filename="urdf.xacro"/>
-
-
-
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="differential_robot">
+    <xacro:include filename="urdf.xacro"/>
+    <!--<xacro:include filename="gazebo.control.xacro"/>-->
+    <xacro:include filename="ros2Control.xacro"/>
+    <xacro:include filename="lidar.sensor.xacro"/>
+    <xacro:include filename="camera.xacro"/>
+    <!--<xacro:include filename="depth.camera.xacro"/>-->
 </robot>
