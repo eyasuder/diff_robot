@@ -65,6 +65,7 @@ def generate_launch_description():
     )
 
     bridge_params = os.path.join(get_package_share_directory(package_name),'config','gz_bridge.yaml')
+    
     ros_gz_bridge = Node(
         package="ros_gz_bridge",
         executable="parameter_bridge",
@@ -72,8 +73,28 @@ def generate_launch_description():
             '--ros-args',
             '-p',
             f'config_file:={bridge_params}',
-        ]
+        ],
+        output= 'screen',
     )
+
+    gazebo_ros_image_bridge = Node(
+    package='ros_gz_image',
+    executable='image_bridge',
+    arguments=['/camera/image_raw'],
+    output='screen',
+)
+    twist_mux_config = os.path.join(get_package_share_directory(package_name),
+                                     'config', 'twist_mux.yaml')
+    twist_mux = Node(
+                    package='twist_mux',
+                    executable='twist_mux',
+                    output='screen',
+                    remappings={('/cmd_vel_out', '/cmd_vel')},
+                    parameters=[{'use_sim_time':True}, twist_mux_config]
+    )
+    
+
+
     # Launch them all!
     return LaunchDescription([
         rsp,
@@ -82,5 +103,7 @@ def generate_launch_description():
         spawn_entity,
         diff_drive_spawner,
         joint_broad_spawner,
-        ros_gz_bridge 
+        ros_gz_bridge,
+        gazebo_ros_image_bridge,
+        twist_mux
     ])

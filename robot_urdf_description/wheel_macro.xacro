@@ -22,6 +22,8 @@
 
         <gazebo reference="${wheel_name}">
             <material>Gazebo/Blue</material>
+            <mu1 value="0.5"/>
+            <mu2 value="0.5"/>
         </gazebo>
 
         <joint name="${wheel_name}_joint" type="continuous">
