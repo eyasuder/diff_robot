@@ -82,7 +82,8 @@ def generate_launch_description():
     executable='image_bridge',
     arguments=['/camera/image_raw'],
     output='screen',
-)
+    )
+    
     twist_mux_config = os.path.join(get_package_share_directory(package_name),
                                      'config', 'twist_mux.yaml')
     twist_mux = Node(

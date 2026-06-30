@@ -11,8 +11,8 @@
             <right_joint>right_wheel_joint</right_joint>
 
             <!--wheel robot geometry /kinematics-->
-            <wheel_separation>0.35</wheel_separation>
-            <wheel_radius>0.05</wheel_radius>
+            <wheel_separation>0.195</wheel_separation>
+            <wheel_radius>0.0325</wheel_radius>
 
             <!-- limits-->
             <max_linear_acceleration>0.32</max_linear_acceleration>

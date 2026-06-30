@@ -5,20 +5,31 @@
 <!-- Import the wheel macro -->
 <xacro:include filename="$(find my_robot)/robot_urdf_description/wheel_macro.xacro"/>
 
-<!-- Define properties -->
-<xacro:property name="x_dimension" value="0.3"/> 
-<xacro:property name="y_dimension" value="0.3"/>
-<xacro:property name="z_dimension" value="0.15"/> 
-
-<xacro:property name="wheel_length" value="0.04"/>
-<xacro:property name="wheel_radius" value="0.05"/>
-<xacro:property name="wheel_mass" value="0.1"/>
-<xacro:property name="chassis_mass" value="0.5"/>
+<!-- Define chassisproperties -->
+<xacro:property name="chassis_length" value="0.25"/> 
+<xacro:property name="chassis_width" value="0.17"/>
+<xacro:property name="chassis_height" value="0.14"/>
+<xacro:property name="chassis_mass" value="0.7"/> 
+<xacro:property name="chassis_offset_x" value="0.045"/> <!-- relative base link-->
+<xacro:property name= "chassis_offset_z" value= "0.023"/> <!-- relative base link-->
+<!--  wheel properties -->
+<xacro:property name="driven_wheel_thickness" value="0.026"/>
+<xacro:property name="driven_wheel_radius" value="0.0325"/>
+<xacro:property name="driven_wheel_mass" value="0.02"/> <!--change with actual mass -->
+<xacro:property name="driven_wheel_offset_y" value ="0.0975"/> <!-- relative to base link-->
+<!--  castor wheel properties -->
+<xacro:property name="castor_wheel_thickness" value="0.022"/> <!--used for cylinderical castor wheel-->
+<xacro:property name="castor_wheel_radius" value="0.019"/>
+<xacro:property name="castor_wheel_mass" value="0.01"/> <!--change with actual mass -->
+<xacro:property name= "castor_wheel_offset_x" value="0.215"/>
+<!--<xacro:property name= "castor_wheel_offset_z" value="${-driven_wheel_radius + castor_wheel_radius}"/> --><!-- relative to chassis-->
+<xacro:property name= "castor_wheel_offset_z" value="${-0.036}"/> <!-- relative to chassis-->
 
 <!--constants-->
 <xacro:property name="PI" value="3.14159"/>
 
 <!-- setting material colors-->
+
 <material name="White">
     <color rgba="1 1 1 1"/>
 </material>
@@ -38,6 +49,23 @@
     <color rgba="0.96 0.26 0.21 1.0"/>
 </material>
 
+
+<material name="Dark">
+    <color rgba="0.3 0.3 0.3 1.0"/>
+</material>
+
+<material name="light_black">
+    <color rgba="0.4 0.4 0.4 1.0"/>
+</material>
+<material name="green">
+    <color rgba="0.0 0.8 0.0 1.0"/>
+  </material>
+
+  <material name="grey">
+    <color rgba="0.5 0.5 0.5 1.0"/>
+  </material>
+
+
 <!--setting up the base link-->
 <link name="base_link">
 </link>
@@ -56,50 +84,50 @@
 
 <link name="chassis_link">
     <visual>
-        <origin xyz="${x_dimension/2} 0 ${z_dimension/2}"/> <!-- this is relative to chassis link-->
+        <origin xyz="${chassis_length/2} 0 ${chassis_height/2}"/> <!-- this is relative to chassis link-->
         <geometry>
-            <box size="${x_dimension} ${y_dimension} ${z_dimension}"/>
+            <box size="${chassis_length} ${chassis_width} ${chassis_height}"/>
         </geometry>
-        <material name="White"/>
+        <material name="Red"/>
     </visual>
     <collision>
-        <origin xyz="${x_dimension/2} 0 ${z_dimension/2}"/>
+        <origin xyz="${chassis_length/2} 0 ${chassis_height/2}"/>
         <geometry>
-            <box size="${x_dimension} ${y_dimension} ${z_dimension}"/>
+            <box size="${chassis_length} ${chassis_width} ${chassis_height}"/>
         </geometry>
     </collision>
-    <xacro:chassis_inertia mass="${chassis_mass}" x="${x_dimension}" y="${y_dimension}" z="${z_dimension}">
-        <origin xyz="${x_dimension/2} 0 ${z_dimension/2}" rpy="0 0 0"/>
+    <xacro:chassis_inertia mass="${chassis_mass}" x="${chassis_length}" y="${chassis_width}" z="${chassis_height}">
+        <origin xyz="${chassis_length/2} 0 ${chassis_height/2}" rpy="0 0 0"/>
     </xacro:chassis_inertia>
 </link>
 
 <joint name="chassis_joint" type="fixed">
     <parent link="base_link"/>
     <child link="chassis_link"/>
-    <origin xyz="-0.1 0 0"/> <!-- change to wheel x and z offset after measurement for real robot-->
+    <origin xyz="${-chassis_offset_x} 0 ${chassis_offset_z}"/> <!-- change to wheel x and z offset after measurement for real robot-->
 </joint>
  <!--adding gazebo reference for displaying the exact color of the robot-->
 <gazebo reference="chassis_link">
-    <material>Gazebo/White</material>
+    <material>Gazebo/Red</material>
 </gazebo>
 <!--##*********************************************##-->
 
 <!-- Use the macro for left and right wheels -->
 <xacro:wheel_link 
     wheel_name="left_wheel" 
-    wheel_radius ="${wheel_radius}" 
-    wheel_length ="${wheel_length}" 
-    wheel_mass="${wheel_mass}" 
-    y_offset="${y_dimension/2 + wheel_radius/2}" 
+    wheel_radius ="${driven_wheel_radius}" 
+    wheel_length ="${driven_wheel_thickness}" 
+    wheel_mass="${driven_wheel_mass}" 
+    y_offset="${driven_wheel_offset_y}" 
     axis_direction="-${PI/2}"
     axis_of_rotation = "1" /> <!-- Indicates rotation of the wheels along the Z axis--> 
 
 <xacro:wheel_link 
     wheel_name="right_wheel" 
-    wheel_radius="${wheel_radius}" 
-    wheel_length="${wheel_length}" 
-    wheel_mass="${wheel_mass}" 
-    y_offset="-${y_dimension/2 + wheel_radius/2}" 
+    wheel_radius="${driven_wheel_radius}" 
+    wheel_length="${driven_wheel_thickness}" 
+    wheel_mass="${driven_wheel_mass}" 
+    y_offset="-${driven_wheel_offset_y}" 
     axis_direction="${PI/2}"
     axis_of_rotation = "-1" /> <!-- Indicates rotation of the wheels along the Z axis-->
 
@@ -107,16 +135,16 @@
 <link name="castor_wheel">
     <visual>
         <geometry>
-            <sphere radius="${wheel_radius}"/>
+            <sphere radius="${castor_wheel_radius}"/>
         </geometry>
         <material name="Black"/>
     </visual>   
     <collision>
         <geometry>
-            <sphere radius="${wheel_radius}"/>
+            <sphere radius="${castor_wheel_radius}"/>
         </geometry>
     </collision> 
-    <xacro:inertia_of_sphere mass="${wheel_mass}" radius="${wheel_radius}">
+    <xacro:inertia_of_sphere mass="${castor_wheel_mass}" radius="${castor_wheel_radius}">
         <origin xyz="0 0 0" rpy="0 0 0"/>
     </xacro:inertia_of_sphere>
 </link>
@@ -130,7 +158,7 @@
 <joint name="castor_wheel_joint" type="fixed">
     <parent link="chassis_link"/>
     <child link="castor_wheel"/>
-    <origin xyz="0.24 0 0"/>
+    <origin xyz="${castor_wheel_offset_x} 0 ${castor_wheel_offset_z}"/>
 </joint>
 
 </robot>

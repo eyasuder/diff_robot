@@ -6,14 +6,14 @@
             <geometry>
                 <box size="0.010 0.03 0.03"/>
             </geometry>
-            <material name="Red"/>
+            <material name="Blue"/>
         </visual>
     </link>
 
     <joint name="camera_joint" type="fixed">
         <parent link="chassis_link"/>
         <child link="camera_link"/>
-        <origin xyz="0.305 0 0.08" rpy="0 0 0"/>
+        <origin xyz="0.255 0 0.1" rpy="0 0 0"/>
     </joint>
 
     <joint name="camera_optical_joint" type="fixed">
@@ -26,12 +26,12 @@
 
 
     <gazebo reference="camera_link">
-        <material name ="Red"/>
+        <material name ="Blue"/>
 
         <sensor name="rgb_camera" type="camera">
             <pose> 0 0 0 0 0 0 </pose>
             <always_on>true</always_on>
-            <visualize>true</visualize>
+            <visualize>false</visualize>
             <update_rate>10</update_rate>
 
             <camera>
