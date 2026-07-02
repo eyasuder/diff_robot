@@ -23,7 +23,7 @@
 <xacro:property name="castor_wheel_mass" value="0.01"/> <!--change with actual mass -->
 <xacro:property name= "castor_wheel_offset_x" value="0.215"/>
 <!--<xacro:property name= "castor_wheel_offset_z" value="${-driven_wheel_radius + castor_wheel_radius}"/> --><!-- relative to chassis-->
-<xacro:property name= "castor_wheel_offset_z" value="${-0.035}"/> <!-- relative to chassis-->
+<xacro:property name= "castor_wheel_offset_z" value="${-0.038}"/> <!-- relative to chassis-->
 
 <!--constants-->
 <xacro:property name="PI" value="3.14159"/>
